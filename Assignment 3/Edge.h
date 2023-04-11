@@ -2,6 +2,7 @@
 #define EDGE_h
 
 class Edge
+
 {
 private:
 	int start;
@@ -26,6 +27,13 @@ public:
 	//Member functions
 	bool isequal(const Edge&); //Checks if two edges are equal
 	void printinfo(); //Prints the attributes of the edge (start, finish, weight)
+	
+	bool operator!=(const Edge&) const; //Checks if two edges are not equal
+	bool operator==(const Edge&) const; //Checks if two edges are equal
+	const Edge& operator=(const Edge&); //Copies the attributes of the edges
+	friend std::ostream& operator<<(std::ostream& out, const Edge& e);
+	void operator++();
+	void operator++(int);
 };
 
 #endif

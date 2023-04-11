@@ -64,3 +64,46 @@ void Edge::printinfo()
 	cout << "Vertex 2: " << finish << endl;
 	cout << "Weight: " << weight << endl;
 }
+
+bool Edge::operator!=(const Edge& other)const {
+	return !( *this == other );
+
+}
+
+bool Edge::operator==(const Edge& other)const {
+	if(start == other.start && finish == other.finish && weight == other.weight)
+	return true;
+	else{
+		return false;
+	}
+
+}
+
+const Edge& Edge::operator=(const Edge& other){
+	start = other.start;
+	finish = other.finish;
+	weight = other.weight;
+	return *this;
+
+}
+std::ostream& operator<<(std::ostream& out, const Edge& e){
+ 	out << e.getstart() << " " << e.getfinish()<< " " << e.getweight() << endl;
+ 	return out;
+ }
+
+void Edge::operator++() {
+	Edge temp;
+	++weight;
+	temp.weight = weight;
+
+
+ }
+
+ void Edge::operator++(int) {
+	Edge temp;
+	++weight;
+	temp.weight = weight;
+
+ }
+
+

@@ -1,21 +1,21 @@
 #include "UGraph.h"
+#include <iostream>
 using namespace std;
 
 UGraph::UGraph()
 {
-	cout << "Created a new graph" << endl;
+
 }
 
-UGraph::UGraph(const UGraph &other): edges{other.edges}, vertices{other.vertices}
+UGraph::UGraph(const UGraph &other)
 {
-	// edges = other.edges;
-	// vertices = other.vertices;
-	// cout << "Copy constructed a new graph" << endl;
+	edges = other.edges;
+	vertices = other.vertices;
 }
 
 UGraph::~UGraph()
 {
-	cout << "Destroyed graph" << endl;
+	
 }
 
 vector<Vertex> UGraph::getvertices()
@@ -137,7 +137,6 @@ bool UGraph::addEdge(Edge& newedge)
 
 bool UGraph::removeEdge(Edge& edgeremove)
 {
-	//Goes through all edges in edges, and removes it if it's equal to the edge we want to remove.
 	for (int i{0}; i<edges.size(); i++)
 	{
 		if (edges[i].isequal(edgeremove))
@@ -174,12 +173,20 @@ void UGraph::display() const
 {
 	cout << "Printing Graph" << "\n" << endl;
 
+	try{ //first sees if there are any vertices in the graph
+		if(vertices.size() == 0){
+			throw invalid_argument("Graph is empty");//if there are no vertices throws exception
+		}
+		else{
+
+		
 	cout << "All vertices:" << "\n" << endl;
 	for (int i{0}; i<vertices.size(); i++)
 	{
 		cout << "ID: " << vertices[i].getID() << endl;
 		cout << "Value: " << vertices[i].getValue() << "\n" << endl;
 	}
+	
 	cout << "Graph connections:" << "\n" << endl;
 	for (int i{0}; i<edges.size(); i++)
 	{
@@ -187,7 +194,14 @@ void UGraph::display() const
 		cout << "ID = " << edges[i].getstart() << " (Value = " << findvalue(edges[i].getstart()) << ")" << " <---> ID = " << edges[i].getfinish() << " (Value = " << findvalue(edges[i].getfinish()) << ")" << endl;
 		cout << "Weight: " << edges[i].getweight() << "\n" << endl;
 	}
+	}
+	}
+	catch(invalid_argument& e){ //catches invalid argument and prints error
+		cout<< "Graph is empty"<< endl;
+	}
+
 }
+
 
 string UGraph::toString()
 {
@@ -234,4 +248,115 @@ bool UGraph::clean()
 	if (edges.empty() && vertices.empty())
 		return true;
 	return false;
+}
+
+bool UGraph::operator==(const UGraph& other) const
+{
+	if(vertices.size() != other.vertices.size())
+	return false;
+	for (int i{0}; i<vertices.size(); i++){
+		if (vertices.at(i) != other.vertices.at(i))
+		return false;
+	}
+	if(edges.size() != other.edges.size())
+	return false;
+	for (int i{0}; i<edges.size(); i++){
+		if (edges.at(i) != other.edges.at(i))
+		return false;
+	}
+	return true;
+}
+
+std::ostream& operator<<(std::ostream& out, const UGraph& g){
+
+	out << "All Vertices: " << endl;
+	for(int i{0}; i<g.vertices.size(); i++)
+	{
+		out << "ID: " << g.vertices[i].getID() << endl;
+		out << "Value: " << g.vertices[i].getValue() << endl;
+	}
+	out << "Edges: " << endl;
+	out << endl;
+	for(int j{0}; j<g.edges.size(); j++){
+		out << "Edge " << j+1 << ":" << endl;
+		out << "ID = " << g.edges[j].getstart() << " (Value = " << g.findvalue(g.edges[j].getstart()) << ")" << " <---> ID = " << g.edges[j].getfinish() << " (Value = " << g.findvalue(g.edges[j].getfinish()) << ")" << endl;
+		out << "Weight: " << g.edges[j].getweight() << "\n" << endl;
+		
+	}
+	return out;
+}
+
+UGraph& UGraph::operator=(UGraph& g){
+	for (int i{0}; i<vertices.size(); i++)
+	{
+		g.addVertex(vertices.at(i));
+			
+	}
+
+	for(int i{0}; i<edges.size(); i++)
+	{
+		g.addEdge(edges.at(i));
+		
+		
+	}
+	return *this;
+	
+}
+
+UGraph UGraph::operator+(UGraph& g){
+	for(int i{0}; i<vertices.size(); i++){
+		if (!(vertices[i] == g.getvertices()[i]))
+			g.addVertex(vertices.at(i));
+		
+	}
+
+	for(int i{0}; i < edges.size(); i++){
+		if (!(edges[i] == g.getedges()[i]))
+			g.addEdge(edges.at(i));
+		
+		
+	}
+	return g;
+
+}
+
+
+
+
+void UGraph::operator++(){
+	
+	for (int i=0; i<edges.size(); i++){
+		Edge& edge = edges.at(i);
+		++edge;
+		
+	}
+	
+}
+
+void UGraph::operator++(int){
+for (int i=0; i<edges.size(); i++){
+	Edge& edge = edges.at(i);
+		++edge;
+	}
+}
+
+Vertex &UGraph::operator[](int index)
+{
+	return vertices[index];
+}
+
+UGraph::operator string()
+{
+	string output;
+	for (int i{0}; i<edges.size(); i++)
+	{
+		output += to_string(edges[i].getstart());
+		output += " <--> ";
+		output += to_string(edges[i].getfinish());
+		output += ", Weight = ";
+		output += to_string(edges[i].getweight());
+		output += "; ";
+	}
+
+	return output;
 }

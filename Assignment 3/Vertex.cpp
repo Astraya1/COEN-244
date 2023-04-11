@@ -46,3 +46,38 @@ void Vertex::printinfo() {
 	cout << "ID: " << ID << endl;
 	cout << "Value: " << value << endl;
 }
+
+ /* void Vertex::operator+(const Vertex &other){
+	
+
+	
+}  */
+
+bool Vertex::operator!=(const Vertex& other) const{
+	return !( *this == other );
+
+}
+
+bool Vertex::operator==(const Vertex& other) const {
+	if(ID == other.ID && value == other.value)
+	return true;
+	else{
+		return false;
+	}
+}
+
+
+
+const Vertex& Vertex::operator=(const Vertex & other){
+		if(&other != this){
+			ID = other.ID;
+			value = other.value;
+		}
+		return *this;
+		
+}
+
+std::ostream& operator<<(std::ostream& out, const Vertex& v){
+ 	out << v.getID() << " " << v.getValue() << endl;
+ 	return out;
+ }

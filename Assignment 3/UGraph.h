@@ -28,6 +28,15 @@ public:
 	vector<int> getneighbors(int);
 	bool clean();
 
+	bool operator==(const UGraph&) const;
+	UGraph& operator=( UGraph&);
+	UGraph operator+( UGraph&);
+	void operator++();
+	void operator++(int);
+	Vertex &operator[](int);
+	friend std::ostream& operator<<(std::ostream& out, const UGraph& g);
+	operator string();
+ 
 private:
 	vector<Vertex> vertices;
 	vector<Edge> edges;
